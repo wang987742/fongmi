@@ -10,6 +10,9 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
+import android.view.SurfaceView;
+import android.view.TextureView;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.media3.common.AudioAttributes;
@@ -146,7 +149,18 @@ public class Players implements Player.Listener, IMediaPlayer.Listener, ParseCal
         exoPlayer.setHandleAudioBecomingNoisy(true);
         exoPlayer.setPlayWhenReady(true);
         exoPlayer.addListener(this);
+        setRender(exoPlayer, view);
         view.setPlayer(exoPlayer);
+    }
+
+    private static void setRender(ExoPlayer exoPlayer, PlayerView view) {
+        View videoView = view.getVideoSurfaceView();
+        if (videoView instanceof TextureView) {
+            exoPlayer.setVideoTextureView((TextureView) videoView);
+        }
+        if (videoView instanceof SurfaceView) {
+            exoPlayer.setVideoSurfaceView((SurfaceView) videoView);
+        }
     }
 
     private void setupIjk(IjkVideoView view) {
@@ -373,10 +387,15 @@ public class Players implements Player.Listener, IMediaPlayer.Listener, ParseCal
     }
 
     public String getPositionTime(long time) {
+        time = getNewTime(time);
+        return stringToTime(time);
+    }
+
+    public long getNewTime(long time) {
         time = getPosition() + time;
         if (time > getDuration()) time = getDuration();
         else if (time < 0) time = 0;
-        return stringToTime(time);
+        return time;
     }
 
     public String getDurationTime() {

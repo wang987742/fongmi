@@ -35,8 +35,8 @@ import com.fongmi.android.tv.event.ErrorEvent;
 import com.fongmi.android.tv.event.PlayerEvent;
 import com.fongmi.android.tv.event.RefreshEvent;
 import com.fongmi.android.tv.impl.SubtitleCallback;
-import com.fongmi.android.tv.player.exo.ExoUtil;
 import com.fongmi.android.tv.player.Players;
+import com.fongmi.android.tv.player.exo.ExoUtil;
 import com.fongmi.android.tv.ui.base.BaseActivity;
 import com.fongmi.android.tv.ui.custom.CustomKeyDownCast;
 import com.fongmi.android.tv.ui.dialog.TrackDialog;
@@ -377,6 +377,8 @@ public class CastActivity extends BaseActivity implements CustomKeyDownCast.List
     private void onPaused(boolean visible) {
         mBinding.widget.exoDuration.setText(mPlayers.getDurationTime());
         mBinding.widget.exoPosition.setText(mPlayers.getPositionTime(0));
+        mBinding.widget.seekBar.setPosition(mPlayers.getPosition());
+        mBinding.widget.seekBar.setDuration(mPlayers.getDuration());
         setState(RenderState.PAUSED);
         if (visible) showInfo();
         else hideInfo();
@@ -468,6 +470,8 @@ public class CastActivity extends BaseActivity implements CustomKeyDownCast.List
         mBinding.widget.exoPosition.setText(mPlayers.getPositionTime(time));
         mBinding.widget.action.setImageResource(time > 0 ? R.drawable.ic_widget_forward : R.drawable.ic_widget_rewind);
         mBinding.widget.center.setVisibility(View.VISIBLE);
+        mBinding.widget.seekBar.setPosition(mPlayers.getNewTime(time));
+        mBinding.widget.seekBar.setDuration(mPlayers.getDuration());
         hideProgress();
     }
 

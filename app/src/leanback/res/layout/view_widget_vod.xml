@@ -112,7 +112,7 @@
 
         <ImageView
             android:id="@+id/action"
-            android:layout_width="56dp"
+            android:layout_width="200dp"
             android:layout_height="56dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_widget_play" />
@@ -148,6 +148,11 @@
                 tools:text="00:00:00" />
 
         </LinearLayout>
+
+        <androidx.media3.ui.DefaultTimeBar
+            android:id="@+id/seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <ImageView

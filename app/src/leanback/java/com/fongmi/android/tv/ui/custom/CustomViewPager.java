@@ -82,7 +82,8 @@ public class CustomViewPager extends ViewPager {
                 int nextLeft = getChildRectInPagerCoordinates(rect, nextFocused).left;
                 int currLeft = getChildRectInPagerCoordinates(rect, currentFocused).left;
                 if (currentFocused != null && nextLeft >= currLeft) {
-                    handled = pageLeft();
+                    shake(currentFocused);
+                    handled = true;
                 } else {
                     handled = nextFocused.requestFocus();
                 }
@@ -90,7 +91,8 @@ public class CustomViewPager extends ViewPager {
                 int nextLeft = getChildRectInPagerCoordinates(rect, nextFocused).left;
                 int currLeft = getChildRectInPagerCoordinates(rect, currentFocused).left;
                 if (currentFocused != null && nextLeft <= currLeft) {
-                    handled = pageRight();
+                    shake(currentFocused);
+                    handled = true;
                 } else {
                     handled = nextFocused.requestFocus();
                 }
@@ -100,14 +102,16 @@ public class CustomViewPager extends ViewPager {
                 shake(currentFocused);
                 handled = true;
             } else {
-                handled = pageLeft();
+                shake(currentFocused);
+                handled = true;
             }
         } else if (direction == FOCUS_RIGHT) {
             if (getAdapter() != null && getCurrentItem() == getAdapter().getCount() - 1) {
                 shake(currentFocused);
                 handled = true;
             } else {
-                handled = pageRight();
+                shake(currentFocused);
+                handled = true;
             }
         }
         if (handled) {

@@ -59,10 +59,10 @@ import com.fongmi.android.tv.event.RefreshEvent;
 import com.fongmi.android.tv.impl.Callback;
 import com.fongmi.android.tv.impl.SubtitleCallback;
 import com.fongmi.android.tv.model.SiteViewModel;
-import com.fongmi.android.tv.player.exo.ExoUtil;
 import com.fongmi.android.tv.player.Players;
 import com.fongmi.android.tv.player.Source;
 import com.fongmi.android.tv.player.danmu.Parser;
+import com.fongmi.android.tv.player.exo.ExoUtil;
 import com.fongmi.android.tv.ui.adapter.QualityAdapter;
 import com.fongmi.android.tv.ui.base.BaseActivity;
 import com.fongmi.android.tv.ui.custom.CustomKeyDownVod;
@@ -270,7 +270,7 @@ public class VideoActivity extends BaseActivity implements CustomKeyDownVod.List
     }
 
     private int getPlayer() {
-        return mHistory != null && mHistory.getPlayer() != -1 ? mHistory.getPlayer() : getSite().getPlayerType() != -1 ? getSite().getPlayerType() : Setting.getPlayer();
+        return mHistory != null && mHistory.getPlayer() != -1 ? mHistory.getPlayer() : Setting.getPlayer();
     }
 
     private int getScale() {
@@ -278,6 +278,9 @@ public class VideoActivity extends BaseActivity implements CustomKeyDownVod.List
     }
 
     private PlayerView getExo() {
+        if (Setting.getRender() == Constant.RENDER_TEXTURE_VIEW) {
+            return mBinding.exoTexture;
+        }
         return mBinding.exo;
     }
 
@@ -1132,6 +1135,8 @@ public class VideoActivity extends BaseActivity implements CustomKeyDownVod.List
 
     private void showInfoAndCenter() {
         showInfo();
+        mBinding.widget.seekBar.setPosition(mPlayers.getPosition());
+        mBinding.widget.seekBar.setDuration(mPlayers.getDuration());
         mBinding.widget.center.setVisibility(View.VISIBLE);
     }
 
@@ -1699,6 +1704,8 @@ public class VideoActivity extends BaseActivity implements CustomKeyDownVod.List
         mBinding.widget.exoPosition.setText(mPlayers.getPositionTime(time));
         mBinding.widget.action.setImageResource(time > 0 ? R.drawable.ic_widget_forward : R.drawable.ic_widget_rewind);
         mBinding.widget.center.setVisibility(View.VISIBLE);
+        mBinding.widget.seekBar.setPosition(mPlayers.getNewTime(time));
+        mBinding.widget.seekBar.setDuration(mPlayers.getDuration());
         hideProgress();
     }
 
