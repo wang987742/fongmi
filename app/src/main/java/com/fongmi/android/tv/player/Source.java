@@ -11,13 +11,17 @@ import com.fongmi.android.tv.player.extractor.Thunder;
 import com.fongmi.android.tv.player.extractor.Video;
 import com.fongmi.android.tv.player.extractor.Youtube;
 import com.fongmi.android.tv.utils.UrlUtil;
+import com.p2p.P2PClass;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Source {
 
     private final List<Extractor> extractors;
+
+    private JianPian jianPian;
 
     private static class Loader {
         static volatile Source INSTANCE = new Source();
@@ -28,15 +32,24 @@ public class Source {
     }
 
     public Source() {
+        jianPian = new JianPian();
         extractors = new ArrayList<>();
         extractors.add(new BiliBili());
         extractors.add(new Force());
-        extractors.add(new JianPian());
+        extractors.add(jianPian);
         extractors.add(new Push());
         extractors.add(new Thunder());
         extractors.add(new TVBus());
         extractors.add(new Video());
         extractors.add(new Youtube());
+    }
+
+    public P2PClass getP2PClass(){
+        return jianPian.getP2PClass();
+    }
+
+    public Map<String,Boolean> getPathPaused(){
+        return jianPian.getPathPaused();
     }
 
     private Extractor getExtractor(String url) {
